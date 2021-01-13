@@ -1,24 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"mylogger"
+	"time"
 )
 
-//logger.Debug
-//logger.Waring
-// logger.Info
-// logger.Trace
-// logger.Error("日志的内容")
-// 需求：
-// 1.可以往不同的输出位置记录日志
-// 2.日志分为5种级别
 func main() {
-	fmt.Fprint(os.Stdout, "这是一条日志")
-	fileObj, err := os.OpenFile("./test.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0777)
-	if err != nil {
-		fmt.Println(err)
-		return
+	log := mylogger.Newlog("debug")
+	for {
+		log.Debug("这是一条debug日志")
+		log.Info("这是一条Info日志")
+		log.Fatal("这是一条Fatal日志")
+		log.Error("这是一条Error日志")
+		log.Waring("这是一条Waring日志")
+		time.Sleep(time.Second * 3)
 	}
-	fmt.Fprintln(fileObj, "这是一条日志")
 }
