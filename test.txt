@@ -1,6 +1,0 @@
-张三
-李瞎子
-王二麻子
-李四
-s张三李四
-wihe bufio mode write to file
