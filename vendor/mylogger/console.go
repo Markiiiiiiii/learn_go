@@ -1,5 +1,8 @@
 package mylogger
 
+//**
+//向终端打印log练习
+//**
 import (
 	"fmt"
 	"time"
@@ -19,45 +22,50 @@ func (l Logger) enable(loglevel LogLevel) bool {
 	return l.Level <= loglevel
 }
 
-//将输入的日志字符串格式化
-func Logprint(llev LogLevel, format string, a ...interface{}) {
+//将输入的日志字符串格式化打印
+func (l Logger) logprint(levStr LogLevel, format string, a ...interface{}) {
 	now := time.Now()
-	msg := fmt.Sprintf(format, a...) //将传入的字符串进行格式化输出，输入字符串需带有标识符，用相应的变量去替换
+	format = fmt.Sprintf(format, a...) //将传入的字符串进行格式化输出，输入字符串需带有标识符，用相应的变量去替换
 	funcName, fileName, linNum := getInfo(3)
-	fmt.Printf("[%s][%s] [%s:%s:%d]%s\n", now.Format("2006-01-02 15:04:05"), printTypestring(llev), fileName, funcName, linNum, msg)
+	fmt.Printf("[%s][%s] [%s:%s:%d]%s\n", now.Format("2006-01-02 15:04:05"), printTypestring(levStr), fileName, funcName, linNum, format)
 }
 
 //Debug 错误
 func (l Logger) Debug(format string, a ...interface{}) {
-	if l.enable(DEBUG) {
-		Logprint(DEBUG, format, a...)
-	}
+	// if l.enable(DEBUG) {
+	// 	logprint(DEBUG, format, a...)
+	// }
+	l.logprint(DEBUG, format, a...)
 }
 
 // Info 详细信息
-func (l Logger) Info(msg string) {
-	if l.enable(INFO) {
-		Logprint(INFO, format, a...)
-	}
+func (l Logger) Info(format string, a ...interface{}) {
+	// if l.enable(INFO) {
+	// 	logprint(INFO, format, a...)
+	// }
+	l.logprint(INFO, format, a...)
 }
 
 //Waring 警告信息
-func (l Logger) Waring(msg string) {
-	if l.enable(WARING) {
-		Logprint(WARING, format, a...)
-	}
+func (l Logger) Waring(format string, a ...interface{}) {
+	// 	if l.enable(WARING) {
+	// 		logprint(WARING, format, a...)
+	// 	}
+	l.logprint(WARING, format, a...)
 }
 
 //Fatal 致命错误
-func (l Logger) Fatal(msg string) {
-	if l.enable(FATAL) {
-		Logprint(FATAL, format, a...)
-	}
+func (l Logger) Fatal(format string, a ...interface{}) {
+	// if l.enable(FATAL) {
+	// 	logprint(FATAL, format, a...)
+	// }
+	l.logprint(FATAL, format, a...)
 }
 
 //Error 错误信息
-func (l Logger) Error(msg string) {
-	if l.enable(ERROR) {
-		Logprint(ERROR, format, a...)
-	}
+func (l Logger) Error(format string, a ...interface{}) {
+	// if l.enable(ERROR) {
+	// 	logprint(ERROR, format, a...)
+	// }
+	l.logprint(ERROR, format, a...)
 }
