@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-//Newlog 构造函数
-func Newlog(levelStr string) Logger {
+//NewConsoleLog 构造函数
+func NewConsoleLog(levelStr string) Logger {
 	level, err := parseLogLevel(levelStr)
 	if err != nil {
-		panic(err)
+		fmt.Printf("NewConsoleLog函数构造失败，err:%v", err)
 	}
 	return Logger{Level: level} //返回一个结构体
 }
@@ -32,40 +32,25 @@ func (l Logger) logprint(levStr LogLevel, format string, a ...interface{}) {
 
 //Debug 错误
 func (l Logger) Debug(format string, a ...interface{}) {
-	// if l.enable(DEBUG) {
-	// 	logprint(DEBUG, format, a...)
-	// }
 	l.logprint(DEBUG, format, a...)
 }
 
 // Info 详细信息
 func (l Logger) Info(format string, a ...interface{}) {
-	// if l.enable(INFO) {
-	// 	logprint(INFO, format, a...)
-	// }
 	l.logprint(INFO, format, a...)
 }
 
 //Waring 警告信息
 func (l Logger) Waring(format string, a ...interface{}) {
-	// 	if l.enable(WARING) {
-	// 		logprint(WARING, format, a...)
-	// 	}
 	l.logprint(WARING, format, a...)
 }
 
 //Fatal 致命错误
 func (l Logger) Fatal(format string, a ...interface{}) {
-	// if l.enable(FATAL) {
-	// 	logprint(FATAL, format, a...)
-	// }
 	l.logprint(FATAL, format, a...)
 }
 
 //Error 错误信息
 func (l Logger) Error(format string, a ...interface{}) {
-	// if l.enable(ERROR) {
-	// 	logprint(ERROR, format, a...)
-	// }
 	l.logprint(ERROR, format, a...)
 }
