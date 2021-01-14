@@ -1,4 +1,0 @@
-[2021-01-14 14:02:28][ERROR] [logtest.go:main:18]这是一条Error日志
-[2021-01-14 14:02:31][ERROR] [logtest.go:main:18]这是一条Error日志
-[2021-01-14 14:02:34][ERROR] [logtest.go:main:18]这是一条Error日志
-[2021-01-14 14:07:43][ERROR] [logtest.go:main:18]这是一条Error日志
