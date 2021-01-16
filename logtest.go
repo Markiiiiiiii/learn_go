@@ -18,6 +18,6 @@ func main() {
 		log.Fatal("这是一条Fatal日志,id:%d,name:%s", id, name)
 		log.Error("这是一条Error日志,id:%d,name:%s", id, name)
 		log.Waring("这是一条Waring日志,id:%d,name:%s", id, name)
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 5)
 	}
 }

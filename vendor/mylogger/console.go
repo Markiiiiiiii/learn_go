@@ -32,25 +32,35 @@ func (l Logger) logprint(levStr LogLevel, format string, a ...interface{}) {
 
 //Debug 错误
 func (l Logger) Debug(format string, a ...interface{}) {
-	l.logprint(DEBUG, format, a...)
+	if l.enable(l.Level) {
+		l.logprint(DEBUG, format, a...)
+	}
 }
 
 // Info 详细信息
 func (l Logger) Info(format string, a ...interface{}) {
-	l.logprint(INFO, format, a...)
+	if l.enable(l.Level) {
+		l.logprint(INFO, format, a...)
+	}
 }
 
 //Waring 警告信息
 func (l Logger) Waring(format string, a ...interface{}) {
-	l.logprint(WARING, format, a...)
+	if l.enable(l.Level) {
+		l.logprint(WARING, format, a...)
+	}
 }
 
 //Fatal 致命错误
 func (l Logger) Fatal(format string, a ...interface{}) {
-	l.logprint(FATAL, format, a...)
+	if l.enable(l.Level) {
+		l.logprint(FATAL, format, a...)
+	}
 }
 
 //Error 错误信息
 func (l Logger) Error(format string, a ...interface{}) {
-	l.logprint(ERROR, format, a...)
+	if l.enable(l.Level) {
+		l.logprint(ERROR, format, a...)
+	}
 }
