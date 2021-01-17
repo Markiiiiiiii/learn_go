@@ -96,8 +96,8 @@ func (f *Filelogger) checkSize(file *os.File) bool {
 	return fileInfo.Size() >= f.maxFileSize
 }
 
-//将输入的日志字符串格式化打印
-func (f *Filelogger) logprint(levStr LogLevel, format string, a ...interface{}) {
+//生成日志文件
+func (f *Filelogger) logWrite(levStr LogLevel, format string, a ...interface{}) {
 	now := time.Now()
 	format = fmt.Sprintf(format, a...) //将传入的字符串进行格式化输出，输入字符串需带有标识符，用相应的变量去替换
 	funcName, fileName, linNum := getInfo(3)
@@ -134,34 +134,34 @@ func (f *Filelogger) closeFile() {
 //Debug 错误
 func (f *Filelogger) Debug(format string, a ...interface{}) {
 	if f.enable(DEBUG) {
-		f.logprint(DEBUG, format, a...)
+		f.logWrite(DEBUG, format, a...)
 	}
 }
 
 // Info 详细信息
 func (f *Filelogger) Info(format string, a ...interface{}) {
 	if f.enable(INFO) {
-		f.logprint(INFO, format, a...)
+		f.logWrite(INFO, format, a...)
 	}
 }
 
 //Waring 警告信息
 func (f *Filelogger) Waring(format string, a ...interface{}) {
 	if f.enable(WARING) {
-		f.logprint(WARING, format, a...)
+		f.logWrite(WARING, format, a...)
 	}
 }
 
 //Fatal 致命错误
 func (f *Filelogger) Fatal(format string, a ...interface{}) {
 	if f.enable(FATAL) {
-		f.logprint(FATAL, format, a...)
+		f.logWrite(FATAL, format, a...)
 	}
 }
 
 //Error 错误信息
 func (f *Filelogger) Error(format string, a ...interface{}) {
 	if f.enable(ERROR) {
-		f.logprint(ERROR, format, a...)
+		f.logWrite(ERROR, format, a...)
 	}
 }
