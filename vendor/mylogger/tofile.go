@@ -133,25 +133,35 @@ func (f *Filelogger) closeFile() {
 
 //Debug 错误
 func (f *Filelogger) Debug(format string, a ...interface{}) {
-	f.logprint(DEBUG, format, a...)
+	if f.enable(DEBUG) {
+		f.logprint(DEBUG, format, a...)
+	}
 }
 
 // Info 详细信息
 func (f *Filelogger) Info(format string, a ...interface{}) {
-	f.logprint(INFO, format, a...)
+	if f.enable(INFO) {
+		f.logprint(INFO, format, a...)
+	}
 }
 
 //Waring 警告信息
 func (f *Filelogger) Waring(format string, a ...interface{}) {
-	f.logprint(WARING, format, a...)
+	if f.enable(WARING) {
+		f.logprint(WARING, format, a...)
+	}
 }
 
 //Fatal 致命错误
 func (f *Filelogger) Fatal(format string, a ...interface{}) {
-	f.logprint(FATAL, format, a...)
+	if f.enable(FATAL) {
+		f.logprint(FATAL, format, a...)
+	}
 }
 
 //Error 错误信息
 func (f *Filelogger) Error(format string, a ...interface{}) {
-	f.logprint(ERROR, format, a...)
+	if f.enable(ERROR) {
+		f.logprint(ERROR, format, a...)
+	}
 }

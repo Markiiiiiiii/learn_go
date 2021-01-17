@@ -8,8 +8,8 @@ import (
 var log mylogger.LogInterface //声明一个全局接口变量
 
 func main() {
-	log = mylogger.NewConsoleLog("error") //终端打印日志模式
-	// log = mylogger.NewFilelogger("info", "./", "test.log", 10*1024) //文件生成日志模式
+	// log = mylogger.NewConsoleLog("debug") //终端打印日志模式
+	log = mylogger.NewFilelogger("info", "./", "test.log", 10*1024) //文件生成日志模式
 	for {
 		name := "李四"
 		id := 1000
