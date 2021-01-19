@@ -33,7 +33,6 @@ func main() {
 			break
 		}
 	}
-	// main()
 }
 
 func getinfo(cityname string) {
