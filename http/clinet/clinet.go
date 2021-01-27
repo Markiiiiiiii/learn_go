@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -22,8 +23,19 @@ func main() {
 
 	//PART2
 	data := url.Values{} //对url进行编码转移
-	uslstr := url.Parse("http:///127.0.0.1:9090/xxx/")
+	urlObjs, _ := url.Parse("http://127.0.0.1:9090/xxx/")
 	data.Set("name", "张三")
-	urlstr := data.Encode() //url encode之后的url
-	req, err := http.NewRequest("GET", urlstr, nil)
+	queryStr := data.Encode() //url encode之后的url
+	urlObjs.RawQuery = queryStr
+	req, err := http.NewRequest("GET", urlObjs.String(), nil)
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	fmt.Println(resp)
 }
