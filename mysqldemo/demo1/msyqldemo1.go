@@ -127,6 +127,25 @@ func delectRow(id int) (err error) {
 	return
 }
 
+// 预处理插入,批量处理数据
+func prepereInsertRow() (err error) {
+	sqlStr := `insert into user(name,age) values(?,?)`
+	stmt, err := db.Prepare(sqlStr)
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	defer stmt.Close()
+	m := map[string]int{
+		"刘五": 30,
+		"马六": 50,
+	}
+	for k, v := range m {
+		stmt.Exec(k, v)
+	}
+	return
+}
+
 func main() {
 	err := initDB()
 	if err != nil {
@@ -136,10 +155,11 @@ func main() {
 	fmt.Println("mysql conn!")
 	// queryRowSingle(2)
 
-	queryRows(5)
+	// queryRows(5)
 	// insretRow()
 	// updateRow(22, 2)
-	delectRow(3)
-	queryRows(5)
+	// delectRow(3)
+	// prepereInsertRow()
+	queryRows(10)
 
 }
