@@ -146,6 +146,36 @@ func prepereInsertRow() (err error) {
 	return
 }
 
+//事务
+func transaction() {
+	tx, err := db.Begin() //开始一个事务
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	// 执行多个sql操作
+	sqlStr1 := `update user set age=age-2 where id=1`
+	sqlStr2 := `update user set age=age+2 where id=2`
+	_, err = tx.Exec(sqlStr1)
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+	_, err = tx.Exec(sqlStr2)
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+	//说明上述连个事务都执行成功了
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+	fmt.Println("Ok")
+	return
+}
+
 func main() {
 	err := initDB()
 	if err != nil {
@@ -160,6 +190,7 @@ func main() {
 	// updateRow(22, 2)
 	// delectRow(3)
 	// prepereInsertRow()
+	transaction()
 	queryRows(10)
 
 }
