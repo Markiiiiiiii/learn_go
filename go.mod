@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/fatih/color v1.10.0 // indirect
+	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/jessevdk/go-flags v1.4.0 // indirect
 	github.com/keegancsmith/rpc v1.3.0 // indirect
