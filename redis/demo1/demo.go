@@ -53,7 +53,43 @@ func redisZsetDemo() (err error) {
 		redis.Z{Score: 92, Member: "Python"},
 		redis.Z{Score: 82, Member: "JS"},
 	}
-	redisDb.ZAdd(zsetkey, languages...)
+	//添加元素组到redis某个key中
+	n, err := redisDb.ZAdd(zsetkey, languages...).Result() //返回值是一共多少元素添加到了key中
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	fmt.Println(n)
+	//对某个数据增加
+	editNum, err := redisDb.ZIncrBy(zsetkey, 20, "Golang").Result() //返回值是修改后的结果
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	fmt.Println(editNum)
+	//取分数最高的3个
+	res, err := redisDb.ZRevRangeWithScores(zsetkey, 0, 2).Result()
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	for _, v := range res {
+		fmt.Println(v.Member, v.Score)
+	}
+
+	//取区间值
+	op := redis.ZRangeBy{
+		Min: "90",
+		Max: "150",
+	}
+	rest, err := redisDb.ZRangeByScoreWithScores(zsetkey, op).Result()
+	if err != nil {
+		fmt.Println("err:", err)
+		return
+	}
+	for _, v := range rest {
+		fmt.Println(v.Member, v.Score)
+	}
 	return
 }
 
