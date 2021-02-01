@@ -6,8 +6,10 @@ import (
 	tail "learn_golang/loganget/taillog"
 	"time"
 
-	ini "github.com/unknwon/goconfig"
+	"github.com/unknwon/goconfig"
 )
+
+var CfgInfo map[string]string
 
 func run() {
 	// 1.读日志
@@ -15,7 +17,7 @@ func run() {
 		select {
 		case line := <-tail.ReadChan():
 			// 2.发送到kafka
-			kafka.SendToKafka("web_log", line.Text)
+			kafka.SendToKafka(CfgInfo["topic"], line.Text)
 		default:
 			time.Sleep(time.Second)
 		}
@@ -25,21 +27,32 @@ func run() {
 }
 
 func main() {
+	CfgInfo = make(map[string]string, 10)
 	//0.加载配置文件
-	cfg, err := ini.LoadConfigFile("./conf/config.ini")
+	cfg, err := goconfig.LoadConfigFile("./conf/config.ini")
 	if err != nil {
-		fmt.Println("load ini file false. err:", err)
+		fmt.Println("load goconfig file false. err:", err)
 		return
 	}
-
+	for _, v := range cfg.GetSectionList() { //获取所有分区列表
+		info, err := cfg.GetSection(v)
+		if err != nil {
+			fmt.Println("get section faild,err:", err)
+			return
+		}
+		for k, x := range info {
+			CfgInfo[k] = x
+		}
+	}
+	// fmt.Println(CfgInfo)
 	//1. 初始化kafka连接
-	err = kafka.Init([]string{"192.168.1.102:9092"})
+	err = kafka.Init([]string{CfgInfo["address"]})
 	if err != nil {
-		fmt.Println("init kafka faild ,err:", err)
+		fmt.Println("goconfigt kafka faild ,err:", err)
 		return
 	}
 	//2.初始化日志收集模块开始收集日志
-	err = tail.Init("./my.log")
+	err = tail.Init(CfgInfo["path"])
 	if err != nil {
 		fmt.Println("Init taillog faild,err:", err)
 		return
