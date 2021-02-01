@@ -85,6 +85,8 @@ golang.org/x/sys/unix
 # gopkg.in/fsnotify.v1 v1.4.7
 ## explicit
 gopkg.in/fsnotify.v1
+# gopkg.in/ini.v1 v1.62.0
+## explicit
 # gopkg.in/jcmturner/aescts.v1 v1.0.1
 gopkg.in/jcmturner/aescts.v1
 # gopkg.in/jcmturner/dnsutils.v1 v1.0.1
