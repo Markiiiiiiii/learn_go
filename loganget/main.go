@@ -6,7 +6,7 @@ import (
 	tail "learn_golang/loganget/taillog"
 	"time"
 
-	ini "gopkg.in/ini.vi"
+	ini "github.com/unknwon/goconfig"
 )
 
 func run() {
@@ -26,7 +26,11 @@ func run() {
 
 func main() {
 	//0.加载配置文件
-	cfg, err := ini.Load("./conf/config.ini")
+	cfg, err := ini.LoadConfigFile("./conf/config.ini")
+	if err != nil {
+		fmt.Println("load ini file false. err:", err)
+		return
+	}
 
 	//1. 初始化kafka连接
 	err = kafka.Init([]string{"192.168.1.102:9092"})
