@@ -63,12 +63,15 @@ func main() {
 		fmt.Println("etcd conntent fiald,err:", err)
 		return
 	}
+
 	// 2.1从etcd中拉取日志收集项的配置信息
 	logEntryConf, err := etcd.GetInfo(CfgInfo["collect_log_key"])
 	if err != nil {
 		fmt.Println("etcd.GetInfo failed ,err:", err)
 		return
 	}
+	// 派一个哨兵监视日志收集项的变化（有变化及时通知我的logagent实现热加载配置）
+	go etcd.WatchConf(CfgInfo["collect_log_key"])
 	// for index, value := range logEntryConf {
 	// 	fmt.Println(index, value)
 	// }

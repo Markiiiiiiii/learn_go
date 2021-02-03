@@ -52,3 +52,14 @@ func GetInfo(key string) (logEntyConf []*LogEntry, err error) {
 	}
 	return
 }
+func WatchConf(key string) {
+	//watch 监视一个KEY的变化
+	ch := cli.Watch(context.Background(), key)
+	for wrsep := range ch {
+		for _, ev := range wrsep.Events {
+			fmt.Printf("Type:%s Key:%s Value:%s\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
+			//通知taillog.tskmgr
+
+		}
+	}
+}
