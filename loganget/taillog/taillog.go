@@ -1,6 +1,7 @@
 package taillog
 
 import (
+	"context"
 	"fmt"
 	"learn_golang/loganget/kafka"
 
@@ -16,12 +17,18 @@ type TailTask struct {
 	path     string
 	topic    string
 	instance *tail.Tail
+	//为实现退出t.run()
+	ctx        context.Context
+	cancleFunc context.CancelFunc
 }
 
 func NewTailTask(path, topic string) (tailObj *TailTask) {
+	ctx, cancle := context.WithCancel(context.Background())
 	tailObj = &TailTask{
-		path:  path,
-		topic: topic,
+		path:       path,
+		topic:      topic,
+		ctx:        ctx,
+		cancleFunc: cancle,
 	}
 	tailObj.init() //构建一个初始化方法Init根据路径打开对应的日志
 	return
@@ -40,7 +47,8 @@ func (t TailTask) init() (err error) {
 		fmt.Println("tail file faild,err:", err)
 		return
 	}
-	go t.run()
+	//
+	go t.run() //直接去采集日志发送到kafka
 	return
 }
 
@@ -67,6 +75,9 @@ func (t TailTask) init() (err error) {
 func (t *TailTask) run() {
 	for {
 		select {
+		case <-t.ctx.Done():
+			fmt.Println("tail task is out->", t.path, "->", t.topic)
+			return
 		case line := <-t.instance.Lines:
 			// kafka.SendToKafka(t.topic, line.Text) //函数调用函数
 			//先把日志数据发到一个通道里，

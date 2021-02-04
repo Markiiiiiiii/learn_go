@@ -52,6 +52,19 @@ func (t *tailLogMgr) run() {
 					t.tskMap[mk] = tailObj
 				}
 			}
+			for _, c1 := range t.logEntry { //从原配置中依次拿出配置项与新的配置中逐一进行比较，
+				isDelete := true
+				for _, c2 := range newConf {
+					if c2.Path == c1.Path && c2.Topic == c1.Topic {
+						isDelete = false
+						continue
+					}
+					if isDelete {
+						mk := fmt.Sprintf("%s_%s", c1.Path, c1.Topic)
+						t.tskMap[mk].cancleFunc()
+					}
+				}
+			}
 			fmt.Println("get new config ", newConf)
 			//找出原来的t.logentry中有，现在newconf中没有的，要删掉
 
