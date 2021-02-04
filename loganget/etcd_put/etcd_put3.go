@@ -21,7 +21,7 @@ func main() {
 	defer cli.Close()
 	//PUT一个k-v
 	ctx, cancle := context.WithTimeout(context.Background(), time.Second)
-	value := `[{"path":"/var/log/nginx/access.log","topic":"web_log"},{"path":"/var/log/redis/db.log","topic":"redis_log"},{"path":"/var/log/mysql/mysql.log","topic":"mysql_log"}]`
+	value := `[{"path":"./access.log","topic":"web_log"},{"path":"./redis.log","topic":"redis_log"},{"path":"./mysql.log","topic":"mysql_log"}]`
 	_, err = cli.Put(ctx, "/logangent/collect_config", value)
 	cancle()
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"learn_golang/loganget/kafka"
 	"learn_golang/loganget/taillog"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/unknwon/goconfig"
@@ -71,7 +72,7 @@ func main() {
 		return
 	}
 	// 派一个哨兵监视日志收集项的变化（有变化及时通知我的logagent实现热加载配置）
-	go etcd.WatchConf(CfgInfo["collect_log_key"])
+
 	// for index, value := range logEntryConf {
 	// 	fmt.Println(index, value)
 	// }
@@ -83,6 +84,12 @@ func main() {
 	// 	taillog.NewTailTask(logEntry.Path, logEntry.Topic)
 	// 	// 3.2发往kafka
 	taillog.Init(logEntryConf)
+	//NewConfChan()访问了tskmgr的newconfchan这个channal是在init初始化的时候执行的
+	newConfChan := taillog.NewConfChan() //从taillog包中获取对外暴露的通道
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go etcd.WatchConf(CfgInfo["collect_log_key"], newConfChan) //哨兵发现最新的配置信息，通知上面的通道
+	wg.Wait()
 	// }
 
 	// //3.初始化日志收集模块开始收集日志

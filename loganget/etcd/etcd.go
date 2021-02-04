@@ -52,14 +52,25 @@ func GetInfo(key string) (logEntyConf []*LogEntry, err error) {
 	}
 	return
 }
-func WatchConf(key string) {
+func WatchConf(key string, newConfch chan<- []*LogEntry) {
 	//watch 监视一个KEY的变化
 	ch := cli.Watch(context.Background(), key)
 	for wrsep := range ch {
 		for _, ev := range wrsep.Events {
 			fmt.Printf("Type:%s Key:%s Value:%s\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
 			//通知taillog.tskmgr
-
+			//1.先判断操作的类型 是否是删除的操作，如果删除的话值就没有了，提前定义一个slice
+			var newConf []*LogEntry
+			if ev.Type != clientv3.EventTypeDelete {
+				//判断是否是删除操作,手动传递一个空的配置项
+				err := json.Unmarshal(ev.Kv.Value, &newConf)
+				if err != nil {
+					fmt.Println("unmarshal faild,err:", err)
+					continue
+				}
+			}
+			fmt.Println("get new conf:", newConf)
+			newConfch <- newConf
 		}
 	}
 }
