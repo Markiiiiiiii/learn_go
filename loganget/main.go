@@ -5,6 +5,7 @@ import (
 	"learn_golang/loganget/etcd"
 	"learn_golang/loganget/kafka"
 	"learn_golang/loganget/taillog"
+	"learn_golang/loganget/utils"
 	"strconv"
 	"sync"
 	"time"
@@ -64,9 +65,15 @@ func main() {
 		fmt.Println("etcd conntent fiald,err:", err)
 		return
 	}
-
+	//为了实现每个logangent都拉取自己独有的配置，所以以自己的ip地址作为区分
 	// 2.1从etcd中拉取日志收集项的配置信息
-	logEntryConf, err := etcd.GetInfo(CfgInfo["collect_log_key"])
+	ipStr, err := utils.GetOutBoundIp()
+	if err != nil {
+		fmt.Println("don't get ip, err:", err)
+		return
+	}
+	etcdConfKey := fmt.Sprintf(CfgInfo["collect_log_key"], ipStr)
+	logEntryConf, err := etcd.GetInfo(etcdConfKey)
 	if err != nil {
 		fmt.Println("etcd.GetInfo failed ,err:", err)
 		return
@@ -88,7 +95,7 @@ func main() {
 	newConfChan := taillog.NewConfChan() //从taillog包中获取对外暴露的通道
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go etcd.WatchConf(CfgInfo["collect_log_key"], newConfChan) //哨兵发现最新的配置信息，通知上面的通道
+	go etcd.WatchConf(etcdConfKey, newConfChan) //哨兵发现最新的配置信息，通知上面的通道
 	wg.Wait()
 	// }
 
