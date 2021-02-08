@@ -17,6 +17,8 @@ require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/hpcloud/tail v1.0.0
+	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/olivere/elastic/v7 v7.0.22
 	github.com/onsi/ginkgo v1.14.2 // indirect
 	github.com/onsi/gomega v1.10.4 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
