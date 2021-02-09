@@ -5,7 +5,6 @@ import (
 	"learn_golang/loganget/etcd"
 	"learn_golang/loganget/kafka"
 	"learn_golang/loganget/taillog"
-	"learn_golang/loganget/utils"
 	"strconv"
 	"sync"
 	"time"
@@ -67,12 +66,13 @@ func main() {
 	}
 	//为了实现每个logangent都拉取自己独有的配置，所以以自己的ip地址作为区分
 	// 2.1从etcd中拉取日志收集项的配置信息
-	ipStr, err := utils.GetOutBoundIp()
-	if err != nil {
-		fmt.Println("don't get ip, err:", err)
-		return
-	}
-	etcdConfKey := fmt.Sprintf(CfgInfo["collect_log_key"], ipStr)
+	// ipStr, err := utils.GetOutBoundIp()
+	// if err != nil {
+	// 	fmt.Println("don't get ip, err:", err)
+	// 	return
+	// }
+	// etcdConfKey := fmt.Sprintf(CfgInfo["collect_log_key"], ipStr)
+	etcdConfKey := CfgInfo["collect_log_key"]
 	logEntryConf, err := etcd.GetInfo(etcdConfKey)
 	if err != nil {
 		fmt.Println("etcd.GetInfo failed ,err:", err)

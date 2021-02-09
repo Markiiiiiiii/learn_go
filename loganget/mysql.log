@@ -11,3 +11,6 @@ mysql access log 10
 mysql test log 1
 mysql test log 2
 mysql test log 3
+consumer mysql log 1
+consumer mysql log -->1
+

@@ -11,3 +11,5 @@ redis access log 10
 redis access log 11
 redis access log 12
 redis access log 13
+redis consumer log 1
+redis consumer log 2
