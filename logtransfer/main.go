@@ -18,10 +18,9 @@ func main() {
 		fmt.Println("init config faild,err:", err)
 		return
 	}
-	fmt.Printf("%v\n", cfg)
 	// 1.1初始化
-	//1.1初始化 es
-	//1.1.1
+	//1.1初始化 es连接的clinet
+	//1.1.1对外提供一个往ES写入数据的一个函数
 	err = es.Init(cfg.ESCfg.Address)
 	if err != nil {
 		fmt.Println("[ES] package init faild ,err:", err)

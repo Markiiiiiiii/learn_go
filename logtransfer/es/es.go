@@ -30,7 +30,7 @@ func SendToES(indexStr string, data interface{}) error {
 	//链式操作
 	put1, err := clinet.Index().
 		Index(indexStr).
-		// Type(typeStr).
+		Type("IP").
 		BodyJson(data).
 		Do(context.Background())
 	if err != nil {

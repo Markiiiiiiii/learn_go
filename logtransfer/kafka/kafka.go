@@ -1,7 +1,6 @@
 package kafka
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/Shopify/sarama"
@@ -10,7 +9,7 @@ import (
 
 //LogData ...
 type LogData struct {
-	data string `json:"data"`
+	Data string `json:"data"`
 }
 
 //初始化Kafka消费者从kafka取数据发给es
@@ -35,17 +34,19 @@ func Init(addrs []string, topic string) error {
 			fmt.Println("don't get partition,err:", err)
 			return err
 		}
-		defer pc.AsyncClose()
+		// defer pc.AsyncClose()
 		go func(sarama.PartitionConsumer) {
 			for msg := range pc.Messages() {
-				fmt.Printf("Partition:%d\n Offset:%d\n Key:%v\n Value:%s\n", msg.Partition, msg.Offset, msg.Key, string(msg.Value))
+				fmt.Printf("Partition:%d Offset:%d Key:%v Value:%s\n", msg.Partition, msg.Offset, msg.Key, string(msg.Value))
 				//直接发给ES
-				var ld = new(LogData)
-				err := json.Unmarshal(msg.Value, ld)
-				if err != nil {
-					fmt.Println("unmarshal faild ,err:", err)
-					continue
+				ld := map[string]interface{}{
+					"data": string(msg.Value),
 				}
+				// fmt.Printf("%#v\n", ld)
+				// if err != nil {
+				// 	fmt.Println("unmarshal faild ,err:", err)
+				// 	continue
+				// }
 				err = es.SendToES(topic, ld)
 			}
 		}(pc)

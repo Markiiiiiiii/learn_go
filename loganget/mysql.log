@@ -13,4 +13,8 @@ mysql test log 2
 mysql test log 3
 consumer mysql log 1
 consumer mysql log -->1
+consumer mysql log -->1
+consumer mysql log -->3
+consumer mysql log -->4
+
 
