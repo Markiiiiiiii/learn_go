@@ -21,7 +21,7 @@ func main() {
 	// 1.1初始化
 	//1.1初始化 es连接的clinet
 	//1.1.1对外提供一个往ES写入数据的一个函数
-	err = es.Init(cfg.ESCfg.Address)
+	err = es.Init(cfg.ESCfg.Address, cfg.ESCfg.ChanSize, cfg.ESCfg.Nums)
 	if err != nil {
 		fmt.Println("[ES] package init faild ,err:", err)
 		return

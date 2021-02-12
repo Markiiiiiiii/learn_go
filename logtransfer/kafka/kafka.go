@@ -7,11 +7,6 @@ import (
 	"learn_go.com/logtransfer/es"
 )
 
-//LogData ...
-type LogData struct {
-	Data string `json:"data"`
-}
-
 //初始化Kafka消费者从kafka取数据发给es
 func Init(addrs []string, topic string) error {
 
@@ -39,15 +34,18 @@ func Init(addrs []string, topic string) error {
 			for msg := range pc.Messages() {
 				fmt.Printf("Partition:%d Offset:%d Key:%v Value:%s\n", msg.Partition, msg.Offset, msg.Key, string(msg.Value))
 				//直接发给ES
-				ld := map[string]interface{}{
-					"data": string(msg.Value),
+				ld := es.LogData{
+					Topic: topic,
+					Data:  string(msg.Value),
 				}
 				// fmt.Printf("%#v\n", ld)
 				// if err != nil {
 				// 	fmt.Println("unmarshal faild ,err:", err)
 				// 	continue
 				// }
-				err = es.SendToES(topic, ld)
+				// err = es.SendToES(topic, ld) //函数调函数
+				//优化一下：直接放到一个chan中，实现异步
+				es.SendToESChan(&ld)
 			}
 		}(pc)
 	}
